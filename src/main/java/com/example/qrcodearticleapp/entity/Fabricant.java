@@ -30,4 +30,12 @@ public class Fabricant {
         this.name = name;
     }
     // Getters and Setters
+
+    public List<Article> getArticles() {
+        return articles;
+    }
+
+    public void setArticles(List<Article> articles) {
+        this.articles = articles;
+    }
 }

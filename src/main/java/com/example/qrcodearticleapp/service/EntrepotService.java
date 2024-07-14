@@ -20,4 +20,12 @@ public class EntrepotService {
     public Entrepot getEntrepotById(Long id) {
         return entrepotRepository.findById(id).orElse(null);
     }
+
+    public Entrepot saveEntrepot(Entrepot entrepot) {
+        return entrepotRepository.save(entrepot);
+    }
+
+    public void deleteEntrepot(Long id) {
+        entrepotRepository.deleteById(id);
+    }
 }

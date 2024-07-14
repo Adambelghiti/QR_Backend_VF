@@ -1,5 +1,7 @@
 package com.example.qrcodearticleapp.entity;
 
+import com.example.qrcodearticleapp.entity.Article;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -19,8 +21,31 @@ public class Entrepot {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getNom() {
         return nom;
     }
-// Other Getters and Setters
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public List<Article> getArticles() {
+        return articles;
+    }
+
+    public void setArticles(List<Article> articles) {
+        this.articles = articles;
+    }
 }

@@ -20,15 +20,15 @@ public class Article {
     @Lob
     private byte[] codeQr;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "entrepot_id")
     private Entrepot entrepot;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "fabricant_id")
     private Fabricant fabricant;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "fournisseur_id")
     private Fournisseur fournisseur;
 
@@ -129,4 +129,14 @@ public class Article {
             this.fournisseur = null;
         }
     }
+    public void setEntrepotId(Long entrepotId) {
+        if (entrepotId != null) {
+            Entrepot entrepot = new Entrepot();
+            entrepot.setId(entrepotId);
+            this.entrepot = entrepot;
+        } else {
+            this.entrepot = null;
+        }
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.example.qrcodearticleapp.controller;
 
 import com.example.qrcodearticleapp.entity.Article;
+import com.example.qrcodearticleapp.entity.Entrepot;
 import com.example.qrcodearticleapp.service.ArticleService;
 import com.example.qrcodearticleapp.service.EntrepotService;
 import com.example.qrcodearticleapp.service.FabricantService;
@@ -64,6 +65,10 @@ public class ArticleController {
     @PostMapping
     public String saveArticle(@ModelAttribute Article article) {
         // Save the article
+        if (article.getEntrepot() != null && article.getEntrepot().getId() != null) {
+            Entrepot entrepot = entrepotService.getEntrepotById(article.getEntrepot().getId());
+            article.setEntrepot(entrepot);
+        }
         articleService.saveArticle(article);
         return "redirect:/articles";
     }
@@ -81,13 +86,19 @@ public class ArticleController {
     @PostMapping("/{id}")
     public String updateArticle(@PathVariable Long id, @ModelAttribute Article article) {
         article.setSerialNumber(id);
+        if (article.getEntrepot() != null && article.getEntrepot().getId() != null) {
+            Entrepot entrepot = entrepotService.getEntrepotById(article.getEntrepot().getId());
+            article.setEntrepot(entrepot);
+        }
         articleService.saveArticle(article);
         return "redirect:/articles";
     }
+
 
     @GetMapping("/delete/{id}")
     public String deleteArticle(@PathVariable Long id) {
         articleService.deleteArticle(id);
         return "redirect:/articles";
     }
+
 }

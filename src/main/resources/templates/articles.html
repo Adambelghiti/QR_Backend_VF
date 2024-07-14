@@ -1,27 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Article App</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .container {
-            width: 80%;
-            margin: auto;
-        }
-        h1, h2 {
-            text-align: center;
-        }
+        /* Add your CSS styles here */
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
         }
         th, td {
-            padding: 10px;
+            padding: 8px;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
@@ -55,46 +43,49 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>QR Code Article App</h1>
-    <h2>Articles</h2>
-    <table>
-        <thead>
-        <tr>
-            <th>Serial Number</th>
-            <th>Nom</th>
-            <th>Length</th>
-            <th>Width</th>
-            <th>Height</th>
-            <th>Category</th>
-            <th>Warehouse</th>
-            <th>Manufacturer</th>
-            <th>Supplier</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="article : ${articles}">
-            <td th:text="${article.serialNumber}"></td>
-            <td th:text="${article.nom}"></td>
-            <td th:text="${article.longueur}"></td>
-            <td th:text="${article.largeur}"></td>
-            <td th:text="${article.hauteur}"></td>
-            <td th:text="${article.categorie}"></td>
-            <td th:text="${article.entrepot.nom}"></td>
-            <td th:text="${article.fabricant.name}"></td>
-            <td th:text="${article.fournisseur.name}"></td>
-            <td>
-                <a th:href="@{/articles/{id}(id=${article.serialNumber})}" class="btn btn-primary">View</a>
-                <a th:href="@{/articles/edit/{id}(id=${article.serialNumber})}" class="btn btn-primary">Edit</a>
-                <a th:href="@{/articles/delete/{id}(id=${article.serialNumber})}" class="btn btn-danger">Delete</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+<h1>QR Code Article App</h1>
 
-    <h2>Create New Article</h2>
-    <a th:href="@{/articles/new}" class="btn btn-primary">Create New Article</a>
-</div>
+<h2>Articles</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Serial Number</th>
+        <th>Nom</th>
+        <th>Length</th>
+        <th>Width</th>
+        <th>Height</th>
+        <th>Category</th>
+        <th>Warehouse</th>
+        <th>Manufacturer</th>
+        <th>Supplier</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="article : ${articles}">
+        <td th:text="${article.serialNumber}"></td>
+        <td th:text="${article.nom}"></td>
+        <td th:text="${article.longueur}"></td>
+        <td th:text="${article.largeur}"></td>
+        <td th:text="${article.hauteur}"></td>
+        <td th:text="${article.categorie}"></td>
+        <td th:text="${article.entrepot.nom}"></td>
+        <td th:text="${article.fabricant.name}"></td>
+        <td th:text="${article.fournisseur.name}"></td>
+        <td>
+            <a th:href="@{/articles/{id}(id=${article.serialNumber})}" class="btn btn-primary">View</a>
+            <a th:href="@{/articles/edit/{id}(id=${article.serialNumber})}" class="btn btn-primary">Edit</a>
+            <a th:href="@{/articles/delete/{id}(id=${article.serialNumber})}" class="btn btn-danger">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<a th:href="@{/welcome}" class="btn btn-primary">Go Back</a>
+
+<h2>Create New Article</h2>
+<a th:href="@{/articles/new}" class="btn btn-primary">Create New Article</a>
+
+<!-- Add your JavaScript code here -->
 </body>
 </html>
