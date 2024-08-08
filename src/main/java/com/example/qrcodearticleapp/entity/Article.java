@@ -1,5 +1,7 @@
 package com.example.qrcodearticleapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 
 @Entity
@@ -20,14 +22,17 @@ public class Article {
     @Lob
     private byte[] codeQr;
 
+    @JsonBackReference("entrepots-articles")
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "entrepot_id")
     private Entrepot entrepot;
 
+    @JsonBackReference("fabricant-articles")
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "fabricant_id")
     private Fabricant fabricant;
 
+    @JsonBackReference("fournisseurs-articles")
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "fournisseur_id")
     private Fournisseur fournisseur;
