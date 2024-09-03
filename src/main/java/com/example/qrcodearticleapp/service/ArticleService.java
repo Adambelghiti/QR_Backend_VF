@@ -1,6 +1,10 @@
 package com.example.qrcodearticleapp.service;
 
+import com.example.qrcodearticleapp.Dto.ArticleDTO;
 import com.example.qrcodearticleapp.entity.Article;
+import com.example.qrcodearticleapp.entity.Entrepot;
+import com.example.qrcodearticleapp.entity.Fabricant;
+import com.example.qrcodearticleapp.entity.Fournisseur;
 import com.example.qrcodearticleapp.repository.ArticleRepository;
 import com.example.qrcodearticleapp.repository.EntrepotRepository;
 import com.example.qrcodearticleapp.repository.FabricantRepository;
@@ -12,11 +16,13 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
+
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
 public class ArticleService {
@@ -42,18 +48,41 @@ public class ArticleService {
     }
 
     public Article saveArticle(Article article) {
-        // Ensure related entities are saved or fetched from the database
-        if (article.getEntrepot() != null && article.getEntrepot().getId() != null) {
-            article.setEntrepot(entrepotRepository.findById(article.getEntrepot().getId()).orElse(null));
-        }
-        if (article.getFabricant() != null && article.getFabricant().getId() != null) {
-            article.setFabricant(fabricantRepository.findById(article.getFabricant().getId()).orElse(null));
-        }
-        if (article.getFournisseur() != null && article.getFournisseur().getId() != null) {
-            article.setFournisseur(fournisseurRepository.findById(article.getFournisseur().getId()).orElse(null));
+        return articleRepository.save(article);
+    }
+
+    public Article createOrUpdateArticle(ArticleDTO articleDTO) {
+        Article article = (articleDTO.getSerialNumber() != null) ?
+                articleRepository.findById(articleDTO.getSerialNumber()).orElse(new Article()) :
+                new Article();
+
+        article.setNom(articleDTO.getNom());
+        article.setLongueur(articleDTO.getLongueur());
+        article.setLargeur(articleDTO.getLargeur());
+        article.setHauteur(articleDTO.getHauteur());
+        article.setCategorie(articleDTO.getCategorie());
+
+        if (articleDTO.getEntrepotNom() != null) {
+            Entrepot entrepot = entrepotRepository.findByNom(articleDTO.getEntrepotNom())
+                    .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Entrepot not found"));
+            article.setEntrepot(entrepot);
         }
 
-        // Generate QR code with full information
+        if (articleDTO.getFabricantName() != null) {
+            Fabricant fabricant = fabricantRepository.findByName(articleDTO.getFabricantName())
+                    .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Fabricant not found"));
+            article.setFabricant(fabricant);
+        }
+
+        if (articleDTO.getFournisseurName() != null) {
+            Fournisseur fournisseur = fournisseurRepository.findByName(articleDTO.getFournisseurName())
+                    .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Fournisseur not found"));
+            article.setFournisseur(fournisseur);
+        }
+
+        // Print the Article object's attributes in the service layer
+        System.out.println("Article in Service Layer: " + article);
+
         String qrContent = String.format("ID: %d, Name: %s, Length: %s, Width: %s, Height: %s, Category: %s, Warehouse: %s, Manufacturer: %s, Supplier: %s",
                 article.getSerialNumber(),
                 article.getNom(),
@@ -66,7 +95,8 @@ public class ArticleService {
                 article.getFournisseur() != null ? article.getFournisseur().getName() : "N/A"
         );
         article.setCodeQr(generateQRCode(qrContent));
-        return articleRepository.save(article);
+
+        return saveArticle(article);
     }
 
     public void deleteArticle(Long id) {

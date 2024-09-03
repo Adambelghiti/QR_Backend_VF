@@ -1,6 +1,7 @@
 package com.example.qrcodearticleapp.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 
@@ -22,21 +23,23 @@ public class Article {
     @Lob
     private byte[] codeQr;
 
-    @JsonBackReference("entrepots-articles")
+    @JsonManagedReference("entrepot-articles")
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "entrepot_id")
     private Entrepot entrepot;
 
-    @JsonBackReference("fabricant-articles")
+    @JsonManagedReference("fabricant-articles")
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "fabricant_id")
     private Fabricant fabricant;
 
-    @JsonBackReference("fournisseurs-articles")
+    @JsonManagedReference("fournisseur-articles")
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "fournisseur_id")
     private Fournisseur fournisseur;
 
+
+    // Getters and Setters
     public Long getSerialNumber() {
         return serialNumber;
     }
@@ -108,15 +111,6 @@ public class Article {
     public void setFabricant(Fabricant fabricant) {
         this.fabricant = fabricant;
     }
-    public void setFabricantId(Long fabricantId) {
-        if (fabricantId != null) {
-            Fabricant fabricant = new Fabricant();
-            fabricant.setId(fabricantId);
-            this.fabricant = fabricant;
-        } else {
-            this.fabricant = null;
-        }
-    }
 
     public Fournisseur getFournisseur() {
         return fournisseur;
@@ -125,23 +119,21 @@ public class Article {
     public void setFournisseur(Fournisseur fournisseur) {
         this.fournisseur = fournisseur;
     }
-    public void setFournisseurId(Long fournisseurId) {
-        if (fournisseurId != null) {
-            Fournisseur fournisseur = new Fournisseur();
-            fournisseur.setId(fournisseurId);
-            this.fournisseur = fournisseur;
-        } else {
-            this.fournisseur = null;
-        }
-    }
-    public void setEntrepotId(Long entrepotId) {
-        if (entrepotId != null) {
-            Entrepot entrepot = new Entrepot();
-            entrepot.setId(entrepotId);
-            this.entrepot = entrepot;
-        } else {
-            this.entrepot = null;
-        }
+
+    @Override
+    public String toString() {
+        return "Article{" +
+                "serialNumber=" + serialNumber +
+                ", nom='" + nom + '\'' +
+                ", longueur=" + longueur +
+                ", largeur=" + largeur +
+                ", hauteur=" + hauteur +
+                ", categorie='" + categorie + '\'' +
+                ", entrepot=" + (entrepot != null ? entrepot.toString() : "N/A") +
+                ", fabricant=" + (fabricant != null ? fabricant.toString() : "N/A") +
+                ", fournisseur=" + (fournisseur != null ? fournisseur.toString() : "N/A") +
+                ", codeQr=" + (codeQr != null ? "[QR Code Data]" : "N/A") +
+                '}';
     }
 
 }

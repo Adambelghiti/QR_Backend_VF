@@ -1,7 +1,7 @@
 package com.example.qrcodearticleapp.controller;
 
-import com.example.qrcodearticleapp.entity.Entrepot;
-import com.example.qrcodearticleapp.repository.EntrepotRepository;
+import com.example.qrcodearticleapp.Dto.EntrepotDTO;
+import com.example.qrcodearticleapp.service.EntrepotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,36 +12,31 @@ import java.util.List;
 public class EntrepotController {
 
     @Autowired
-    private EntrepotRepository entrepotRepository;
+    private EntrepotService entrepotService;
 
     @GetMapping
-    public List<Entrepot> getAllEntrepots() {
-        return entrepotRepository.findAll();
+    public List<EntrepotDTO> getAllEntrepots() {
+        return entrepotService.getAllEntrepots();
     }
 
     @GetMapping("/{id}")
-    public Entrepot getEntrepotById(@PathVariable Long id) {
-        return entrepotRepository.findById(id).orElse(null);
+    public EntrepotDTO getEntrepotById(@PathVariable Long id) {
+        return entrepotService.getEntrepotById(id);
     }
 
     @PostMapping
-    public Entrepot saveEntrepot(@RequestBody Entrepot entrepot) {
-        return entrepotRepository.save(entrepot);
+    public EntrepotDTO saveEntrepot(@RequestBody EntrepotDTO entrepotDTO) {
+        return entrepotService.saveEntrepot(entrepotDTO);
     }
 
     @PutMapping("/{id}")
-    public Entrepot updateEntrepot(@PathVariable Long id, @RequestBody Entrepot entrepot) {
-        if (!entrepotRepository.existsById(id)) {
-            return null;
-        }
-        entrepot.setId(id);
-        return entrepotRepository.save(entrepot);
+    public EntrepotDTO updateEntrepot(@PathVariable Long id, @RequestBody EntrepotDTO entrepotDTO) {
+        entrepotDTO.setId(id);
+        return entrepotService.saveEntrepot(entrepotDTO);
     }
 
     @DeleteMapping("/{id}")
     public void deleteEntrepot(@PathVariable Long id) {
-        if (entrepotRepository.existsById(id)) {
-            entrepotRepository.deleteById(id);
-        }
+        entrepotService.deleteEntrepot(id);
     }
 }

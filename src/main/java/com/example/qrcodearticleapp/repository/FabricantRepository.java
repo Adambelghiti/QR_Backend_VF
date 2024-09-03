@@ -7,9 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface FabricantRepository extends JpaRepository<Fabricant, Long> {
      //Fabricant findByName(String name, List<Fabricant> fabricants);
-     Fabricant findByName(String name);
+     Optional<Fabricant> findByName(String name);
 }

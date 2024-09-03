@@ -1,6 +1,7 @@
 package com.example.qrcodearticleapp.entity;
 
 import com.example.qrcodearticleapp.entity.Article;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -16,8 +17,7 @@ public class Entrepot {
     private String location;
 
     @OneToMany(mappedBy = "entrepot")
-    @JsonManagedReference("entrepots-articles")
-
+    @JsonBackReference("entrepot-articles")
     private List<Article> articles;
 
     public Long getId() {
@@ -50,5 +50,14 @@ public class Entrepot {
 
     public void setArticles(List<Article> articles) {
         this.articles = articles;
+    }
+
+    @Override
+    public String toString() {
+        return "Entrepot{" +
+                "id=" + id +
+                ", nom='" + nom + '\'' +
+                ", location='" + location + '\'' +
+                '}';
     }
 }
